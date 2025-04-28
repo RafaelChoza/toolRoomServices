@@ -10,7 +10,6 @@ interface ServiceFormData {
     status: string;
     worker: string;
     dateTime: string;
-    file?: File; // Nueva propiedad para almacenar el archivo
 }
 
 export default function CrearServicio() {
@@ -23,7 +22,6 @@ export default function CrearServicio() {
         dateTime: new Date().toISOString(),
     });
 
-    const [file, setFile] = useState<File | null>(null); // Estado para el archivo
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
@@ -41,34 +39,19 @@ export default function CrearServicio() {
         }));
     };
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setFile(e.target.files[0]); // Guardar el archivo en el estado
-        }
-    };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
         setSuccess(false);
 
-        // Crear un objeto FormData para enviar el archivo y los datos
-        const formDataToSend = new FormData();
-        formDataToSend.append('customer', formData.customer);
-        formDataToSend.append('descriptionService', formData.descriptionService);
-        formDataToSend.append('area', formData.area);
-        formDataToSend.append('status', formData.status);
-        formDataToSend.append('worker', formData.worker);
-        formDataToSend.append('dateTime', formData.dateTime);
-        if (file) {
-            formDataToSend.append('file', file); // Agregar el archivo al FormData
-        }
-
         try {
             const response = await fetch('http://localhost:8080/services', {
                 method: 'POST',
-                body: formDataToSend, // Enviar FormData en lugar de JSON
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
             });
 
             if (!response.ok) throw new Error('Error al crear el servicio');
@@ -142,19 +125,6 @@ export default function CrearServicio() {
                         className="w-full p-3 bg-gray-700 text-white border border-cyan-500 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-400"
                         required
                         placeholder="Área donde se realizará el servicio"
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="file" className="block text-cyan-300 font-semibold mb-1">
-                        Subir Archivo
-                    </label>
-                    <input
-                        type="file"
-                        id="file"
-                        name="file"
-                        onChange={handleFileChange}
-                        className="w-full bg-gray-700 text-white border border-cyan-500 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-400"
                     />
                 </div>
 

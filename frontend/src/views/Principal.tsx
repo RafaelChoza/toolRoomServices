@@ -36,13 +36,14 @@ export default function Principal() {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Para el modal de edición
   const [showModal, setShowModal] = useState(false);
   const [serviceToEdit, setServiceToEdit] = useState<Service | null>(null);
 
   const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
   const username = userProfile.username;
   const perfil = userProfile.perfil;
+
+  const statusOptions = ['PENDIENTE', 'EN PROCESO', 'COMPLETADO', 'CANCELADO'];
 
   useEffect(() => {
     fetchServices();
@@ -174,69 +175,71 @@ export default function Principal() {
             <span className="text-gray-400">No se encontraron servicios.</span>
           </div>
         ) : (
-          filteredServicios.map((item) => (
-            <div
-              key={item.id}
-              className="bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-cyan-500/50 transition-shadow border border-cyan-600"
-            >
-              <div className="flex justify-between flex-wrap">
-                <div className="flex flex-col space-y-2">
-                  <p><strong className="text-cyan-300">N° de Servicio:</strong> {item.id}</p>
-                  <p><strong className="text-cyan-300">Cliente:</strong> {item.customer}</p>
-                  <p><strong className="text-cyan-300">Servicio:</strong> {item.descriptionService}</p>
-                  <p><strong className="text-cyan-300">Área:</strong> {item.area}</p>
-                  <p><strong className="text-cyan-300">Estado:</strong> {item.status}</p>
-                </div>
-                <div className="flex flex-col space-y-2 text-right">
-                  <p><strong className="text-pink-400">Trabajador actual:</strong> {item.worker || "Sin asignar"}</p>
-                  {perfil !== 'USER' && (
-                    <p>
-                      <strong className="text-pink-400">Asignar Trabajador:</strong>{" "}
-                      <select
-                        className="bg-gray-700 text-gray-300 rounded-lg p-2 mt-1"
-                        onChange={(e) => handleAssignWorker(item.id, Number(e.target.value))}
-                        value={item.workerId || ""}
-                      >
-                        <option value="">Seleccionar trabajador</option>
-                        {workers.map((worker) => (
-                          <option key={worker.id} value={worker.id}>
-                            {worker.nameWorker} {worker.lastName}
-                          </option>
-                        ))}
-                      </select>
-                    </p>
-                  )}
-                  <p><strong className="text-pink-400">Fecha:</strong> {new Date(item.dateTime).toLocaleString()}</p>
-                  <div className="flex flex-col space-x-2 md:space-x-2 mt-2 space-y-2 md:flex-row">
+          [...filteredServicios]
+            .sort((a, b) => new Date(b.dateTime).getTime() - new Date(a.dateTime).getTime())
+            .map((item) => (
+              <div
+                key={item.id}
+                className="bg-gray-800 p-6 rounded-2xl shadow-lg hover:shadow-cyan-500/50 transition-shadow border border-cyan-600"
+              >
+                <div className="flex justify-between flex-wrap">
+                  <div className="flex flex-col space-y-2">
+                    <p><strong className="text-cyan-300">N° de Servicio:</strong> {item.id}</p>
+                    <p><strong className="text-cyan-300">Cliente:</strong> {item.customer}</p>
+                    <p><strong className="text-cyan-300">Servicio:</strong> {item.descriptionService}</p>
+                    <p><strong className="text-cyan-300">Área:</strong> {item.area}</p>
+                    <p><strong className="text-cyan-300">Estado:</strong> {item.status}</p>
+                  </div>
+                  <div className="flex flex-col space-y-2 text-right">
+                    <p><strong className="text-pink-400">Trabajador actual:</strong> {item.worker || "Sin asignar"}</p>
                     {perfil !== 'USER' && (
-                      <>
-                        <button
-                          className="bg-pink-500 hover:bg-pink-400 text-white font-semibold py-1 px-3 rounded-xl shadow-md hover:shadow-pink-400 transition-all flex items-center justify-center h-12"
-                          onClick={() => openEditModal(item)}
+                      <p>
+                        <strong className="text-pink-400">Asignar Trabajador:</strong>{" "}
+                        <select
+                          className="bg-gray-700 text-gray-300 rounded-lg p-2 mt-1"
+                          onChange={(e) => handleAssignWorker(item.id, Number(e.target.value))}
+                          value={item.workerId || ""}
                         >
-                          Editar
-                        </button>
-                        <button
-                          className="bg-red-500 hover:bg-red-400 text-white font-semibold py-1 px-3 rounded-xl shadow-md hover:shadow-red-400 transition-all flex items-center justify-center h-12"
-                          onClick={() => completeService(item.id)}
-                        >
-                          Completado
-                        </button>
-                      </>
+                          <option value="">Seleccionar trabajador</option>
+                          {workers.map((worker) => (
+                            <option key={worker.id} value={worker.id}>
+                              {worker.nameWorker} {worker.lastName}
+                            </option>
+                          ))}
+                        </select>
+                      </p>
                     )}
-                    <Link
-                      to={`/services/${item.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-1 px-3 rounded-xl shadow-md hover:shadow-cyan-300 transition-all flex items-center justify-center h-12"
-                    >
-                      Mostrar detalle
-                    </Link>
+                    <p><strong className="text-pink-400">Fecha:</strong> {new Date(item.dateTime).toLocaleString()}</p>
+                    <div className="flex flex-col space-x-2 md:space-x-2 mt-2 space-y-2 md:flex-row">
+                      {perfil !== 'USER' && (
+                        <>
+                          <button
+                            className="bg-pink-500 hover:bg-pink-400 text-white font-semibold py-1 px-3 rounded-xl shadow-md hover:shadow-pink-400 transition-all flex items-center justify-center h-12"
+                            onClick={() => openEditModal(item)}
+                          >
+                            Editar
+                          </button>
+                          <button
+                            className="bg-red-500 hover:bg-red-400 text-white font-semibold py-1 px-3 rounded-xl shadow-md hover:shadow-red-400 transition-all flex items-center justify-center h-12"
+                            onClick={() => completeService(item.id)}
+                          >
+                            Completado
+                          </button>
+                        </>
+                      )}
+                      <Link
+                        to={`/services/${item.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-cyan-600 hover:bg-cyan-500 text-white font-semibold py-1 px-3 rounded-xl shadow-md hover:shadow-cyan-300 transition-all flex items-center justify-center h-12"
+                      >
+                        Mostrar detalle
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))
+            ))
         )}
       </div>
 
@@ -278,8 +281,21 @@ export default function Principal() {
               >
                 <option value="">Seleccionar Trabajador</option>
                 {workers.map((worker) => (
-                  <option key={worker.id} value={worker.nameWorker + " " + worker.lastName}>
+                  <option key={worker.id} value={`${worker.nameWorker} ${worker.lastName}`}>
                     {worker.nameWorker} {worker.lastName}
+                  </option>
+                ))}
+              </select>
+              <select
+                name="status"
+                value={serviceToEdit.status}
+                onChange={handleEditChange}
+                className="bg-gray-700 p-3 rounded-lg text-gray-300"
+              >
+                <option value="">Seleccionar Estado</option>
+                {statusOptions.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
                   </option>
                 ))}
               </select>
