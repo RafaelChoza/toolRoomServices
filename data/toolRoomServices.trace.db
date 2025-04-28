@@ -331,3 +331,6 @@ select lu1_0.id,lu1_0.password,lu1_0.perfil,lu1_0.username from login_user lu1_0
 	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
 	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63)
 	at java.base/java.lang.Thread.run(Thread.java:1575)
+2025-04-28 10:11:39.131876-06:00 jdbc[75]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SERVICIOS" not found; SQL statement:
+ALTER TABLE servicios ADD COLUMN email VARCHAR(255) [42102-232]

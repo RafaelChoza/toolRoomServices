@@ -12,6 +12,7 @@ public class ToolRoomServiceCompleted {
     private Long id;
 
     private String customer;
+    private String email;
     private String descriptionService;
     private String worker;
     private String area;
@@ -93,5 +94,13 @@ public class ToolRoomServiceCompleted {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

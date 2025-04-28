@@ -57,6 +57,7 @@ public class ToolRoomServicesService {
         ToolRoomServiceCompleted completedService = new ToolRoomServiceCompleted();
 
         completedService.setCustomer(service.getCustomer());
+        completedService.setEmail(service.getEmail());
         completedService.setDateTime(service.getDateTime()); // Fecha de creación
         completedService.setCompletedDateTime(LocalDateTime.now(ZoneId.of("America/Mexico_City"))); // Fecha de finalización
 
@@ -111,4 +112,5 @@ public class ToolRoomServicesService {
 
         return toolRoomServiceRepository.save(service);
     }
+
 }

@@ -14,6 +14,7 @@ public class ToolRoomService {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String customer;
+    private String email;
     private LocalDateTime dateTime;
     private String descriptionService;
     private String worker = "Sin asignar";
@@ -32,6 +33,14 @@ public class ToolRoomService {
     }
 
     // Getters y setters
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getCustomer() {
         return customer;
     }

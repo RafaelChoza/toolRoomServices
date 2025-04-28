@@ -6,7 +6,6 @@ import com.projects.ToolRoomServices.dto.Worker;
 import com.projects.ToolRoomServices.model.ToolRoomServiceCompleted;
 import com.projects.ToolRoomServices.service.LoginService;
 import com.projects.ToolRoomServices.service.ToolRoomServicesService;
-import org.apache.juli.logging.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 

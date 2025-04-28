@@ -5,6 +5,7 @@ import LogoutButton from './LogoutButton';
 
 interface ServiceFormData {
     customer: string;
+    email: string; // Nuevo campo para el correo del cliente
     descriptionService: string;
     area: string;
     status: string;
@@ -15,6 +16,7 @@ interface ServiceFormData {
 export default function CrearServicio() {
     const [formData, setFormData] = useState<ServiceFormData>({
         customer: '',
+        email: '', // Inicializa el campo de correo vacío
         descriptionService: '',
         area: '',
         status: 'Recibido',
@@ -94,6 +96,22 @@ export default function CrearServicio() {
                         className="w-full p-3 bg-gray-700 text-white border border-cyan-500 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-400"
                         required
                         placeholder="Nombre del cliente"
+                    />
+                </div>
+                
+                <div>
+                    <label htmlFor="email" className="block text-cyan-300 font-semibold mb-1">
+                        Correo electrónico
+                    </label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full p-3 bg-gray-700 text-white border border-cyan-500 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                        required
+                        placeholder="Correo del cliente"
                     />
                 </div>
 

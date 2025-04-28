@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function Menu() {
     const [isOpen, setIsOpen] = useState(false); // Estado para abrir/cerrar el menú
+    const menuRef = useRef<HTMLDivElement | null>(null);
 
     const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
     const perfil = userProfile.perfil;
@@ -11,8 +12,21 @@ export default function Menu() {
         setIsOpen(!isOpen); // Alterna entre abrir y cerrar
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className="relative inline-block">
+        <div className="relative inline-block" ref={menuRef}>
             {/* Ícono del menú */}
             <button
                 onClick={toggleMenu}
@@ -100,3 +114,5 @@ export default function Menu() {
         </div>
     );
 }
+// Removed the conflicting custom useRef function definition.
+

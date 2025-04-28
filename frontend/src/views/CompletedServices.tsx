@@ -5,6 +5,7 @@ import LogoutButton from './LogoutButton';
 interface Service {
     completedDateTime: any;
     id: number;
+    email: string;
     customer: string;
     dateTime: string;
     dateCompleted: string;
@@ -54,7 +55,8 @@ export default function CompletedServices() {
     const filteredCompleted = completed.filter((item) =>
         item.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.descriptionService.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.area.toLowerCase().includes(searchTerm.toLowerCase())
+        item.area.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.email.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -101,6 +103,10 @@ export default function CompletedServices() {
                                     <p>
                                         <strong className="text-cyan-300">Cliente:</strong>{" "}
                                         {item.customer}
+                                    </p>
+                                    <p>
+                                        <strong className="text-cyan-300">Correo:</strong>{" "}
+                                        {item.email}
                                     </p>
                                     <p>
                                         <strong className="text-cyan-300">Servicio:</strong>{" "}

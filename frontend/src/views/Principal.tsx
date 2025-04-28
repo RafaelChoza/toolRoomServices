@@ -5,6 +5,7 @@ import LogoutButton from './LogoutButton';
 
 interface Service {
   id: number;
+  email: string;
   customer: string;
   dateTime: string;
   descriptionService: string;
@@ -144,7 +145,8 @@ export default function Principal() {
   const filteredServicios = servicios.filter((servicio) =>
     servicio.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
     servicio.descriptionService.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    servicio.area.toLowerCase().includes(searchTerm.toLowerCase())
+    servicio.area.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    servicio.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -186,6 +188,7 @@ export default function Principal() {
                   <div className="flex flex-col space-y-2">
                     <p><strong className="text-cyan-300">N° de Servicio:</strong> {item.id}</p>
                     <p><strong className="text-cyan-300">Cliente:</strong> {item.customer}</p>
+                    <p><strong className="text-cyan-300">Correo:</strong> {item.email}</p>
                     <p><strong className="text-cyan-300">Servicio:</strong> {item.descriptionService}</p>
                     <p><strong className="text-cyan-300">Área:</strong> {item.area}</p>
                     <p><strong className="text-cyan-300">Estado:</strong> {item.status}</p>
@@ -256,6 +259,14 @@ export default function Principal() {
                 onChange={handleEditChange}
                 className="bg-gray-700 p-3 rounded-lg text-gray-300"
                 placeholder="Cliente"
+              />
+              <input
+                type="text"
+                name="email"
+                value={serviceToEdit.email}
+                onChange={handleEditChange}
+                className="bg-gray-700 p-3 rounded-lg text-gray-300"
+                placeholder="Correo"
               />
               <input
                 type="text"
