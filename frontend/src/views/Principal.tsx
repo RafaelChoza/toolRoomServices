@@ -11,6 +11,9 @@ interface Service {
   descriptionService: string;
   workerId: number | null;
   worker: string;
+  process1: string;
+  process2: string;
+  process3: string;
   area: string;
   status: string;
 }
@@ -100,9 +103,9 @@ export default function Principal() {
           prevServicios.map((s) =>
             s.id === serviceId
               ? {
-                  ...s,
-                  worker: `${assignedWorker.nameWorker} ${assignedWorker.lastName}`,
-                }
+                ...s,
+                worker: `${assignedWorker.nameWorker} ${assignedWorker.lastName}`,
+              }
               : s
           )
         );
@@ -212,6 +215,9 @@ export default function Principal() {
                         </select>
                       </p>
                     )}
+                    <p><strong>Proceso 1:</strong>{item.process1}</p>
+                    <p><strong>Proceso 2:</strong>{item.process2}</p>
+                    <p><strong>Proceso 3:</strong>{item.process3}</p>
                     <p><strong className="text-pink-400">Fecha:</strong> {new Date(item.dateTime).toLocaleString()}</p>
                     <div className="flex flex-col space-x-2 md:space-x-2 mt-2 space-y-2 md:flex-row">
                       {perfil !== 'USER' && (
@@ -245,90 +251,52 @@ export default function Principal() {
             ))
         )}
       </div>
-
       {/* Modal */}
       {showModal && serviceToEdit && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
-          <div className="bg-gray-800 p-8 rounded-2xl shadow-lg w-full max-w-md">
-            <h2 className="text-2xl font-bold mb-6 text-cyan-400">Editar Servicio</h2>
-            <div className="flex flex-col gap-4">
-              <input
-                type="text"
-                name="customer"
-                value={serviceToEdit.customer}
-                onChange={handleEditChange}
-                className="bg-gray-700 p-3 rounded-lg text-gray-300"
-                placeholder="Cliente"
-              />
-              <input
-                type="text"
-                name="email"
-                value={serviceToEdit.email}
-                onChange={handleEditChange}
-                className="bg-gray-700 p-3 rounded-lg text-gray-300"
-                placeholder="Correo"
-              />
-              <input
-                type="text"
-                name="descriptionService"
-                value={serviceToEdit.descriptionService}
-                onChange={handleEditChange}
-                className="bg-gray-700 p-3 rounded-lg text-gray-300"
-                placeholder="Descripción del Servicio"
-              />
-              <input
-                type="text"
-                name="area"
-                value={serviceToEdit.area}
-                onChange={handleEditChange}
-                className="bg-gray-700 p-3 rounded-lg text-gray-300"
-                placeholder="Área"
-              />
-              <select
-                name="worker"
-                value={serviceToEdit.worker || ""}
-                onChange={handleEditChange}
-                className="bg-gray-700 p-3 rounded-lg text-gray-300"
-              >
-                <option value="">Seleccionar Trabajador</option>
-                {workers.map((worker) => (
-                  <option key={worker.id} value={`${worker.nameWorker} ${worker.lastName}`}>
-                    {worker.nameWorker} {worker.lastName}
-                  </option>
-                ))}
-              </select>
-              <select
-                name="status"
-                value={serviceToEdit.status}
-                onChange={handleEditChange}
-                className="bg-gray-700 p-3 rounded-lg text-gray-300"
-              >
-                <option value="">Seleccionar Estado</option>
-                {statusOptions.map((status) => (
-                  <option key={status} value={status}>
-                    {status}
-                  </option>
-                ))}
-              </select>
-
-              <div className="flex justify-end gap-4 mt-6">
-                <button
-                  className="bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-6 rounded-xl"
-                  onClick={handleEditSubmit}
-                >
-                  Guardar
-                </button>
-                <button
-                  className="bg-red-600 hover:bg-red-500 text-white py-2 px-6 rounded-xl"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancelar
-                </button>
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50">
+          <div className="bg-gray-800 p-8 rounded-none shadow-lg w-full h-full flex flex-col justify-center items-center">
+            <h2 className="text-2xl font-bold mb-6 text-cyan-400 text-center">Editar Servicio</h2>
+            <div className="grid grid-cols-2 gap-6 w-full max-w-lg">
+              {/* Primera columna */}
+              <div className="flex flex-col gap-4">
+                <input type="text" name="customer" value={serviceToEdit.customer} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full" placeholder="Cliente" />
+                <input type="text" name="email" value={serviceToEdit.email} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full" placeholder="Correo" />
+                <input type="text" name="descriptionService" value={serviceToEdit.descriptionService} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full" placeholder="Descripción del Servicio" />
+                <input type="text" name="area" value={serviceToEdit.area} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full" placeholder="Área" />
+                <select name="status" value={serviceToEdit.status} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full">
+                  <option value="">Seleccionar Estado</option>
+                  {statusOptions.map((status) => (
+                    <option key={status} value={status}>{status}</option>
+                  ))}
+                </select>
               </div>
+
+              {/* Segunda columna */}
+              <div className="flex flex-col gap-4">
+                <select name="worker" value={serviceToEdit.worker || ""} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full">
+                  <option value="">Seleccionar Trabajador</option>
+                  {workers.map((worker) => (
+                    <option key={worker.id} value={`${worker.nameWorker} ${worker.lastName}`}>
+                      {worker.nameWorker} {worker.lastName}
+                    </option>
+                  ))}
+                </select>
+                <input type="text" name="process1" value={serviceToEdit.process1} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full" placeholder="Proceso 1" />
+                <input type="text" name="process2" value={serviceToEdit.process2} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full" placeholder="Proceso 2" />
+                <input type="text" name="process3" value={serviceToEdit.process3} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full" placeholder="Proceso 3" />
+              </div>
+            </div>
+
+            {/* Botones */}
+            <div className="flex justify-end gap-4 mt-6 w-full max-w-lg">
+              <button className="bg-cyan-600 hover:bg-cyan-500 text-white py-2 px-6 rounded-xl w-1/2" onClick={handleEditSubmit}>Guardar</button>
+              <button className="bg-red-600 hover:bg-red-500 text-white py-2 px-6 rounded-xl w-1/2" onClick={() => setShowModal(false)}>Cancelar</button>
             </div>
           </div>
         </div>
       )}
+
+
     </div>
   );
 }

@@ -18,10 +18,38 @@ public class ToolRoomService {
     private LocalDateTime dateTime;
     private String descriptionService;
     private String worker = "Sin asignar";
+    private String proceso1 = "Sin asignar";
+    private String proceso2 = "Sin asignar";
+    private String proceso3 = "Sin asignar";
     private String area;
     private String status = "Recibido";
 
     // Constructor vacío o con parámetros, según lo necesites
+
+    public String getProceso1() {
+        return proceso1;
+    }
+
+    public void setProceso1(String proceso1) {
+        this.proceso1 = proceso1;
+    }
+
+    public String getProceso2() {
+        return proceso2;
+    }
+
+    public void setProceso2(String proceso2) {
+        this.proceso2 = proceso2;
+    }
+
+    public String getProceso3() {
+        return proceso3;
+    }
+
+    public void setProceso3(String proceso3) {
+        this.proceso3 = proceso3;
+    }
+
     public ToolRoomService() {
     }
 

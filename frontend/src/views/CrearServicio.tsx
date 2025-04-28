@@ -10,6 +10,9 @@ interface ServiceFormData {
     area: string;
     status: string;
     worker: string;
+    process1: string;
+    process2: string;
+    process3: string;
     dateTime: string;
 }
 
@@ -21,6 +24,9 @@ export default function CrearServicio() {
         area: '',
         status: 'Recibido',
         worker: 'Sin asignar',
+        process1: 'Sin asignar',
+        process2: 'Sin asignar',
+        process3: 'Sin asignar',
         dateTime: new Date().toISOString(),
     });
 
