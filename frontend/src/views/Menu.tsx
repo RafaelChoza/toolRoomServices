@@ -106,6 +106,18 @@ export default function Menu() {
                                 >
                                     Crear Usuario
                                 </Link>
+                                <Link
+                                    className="hover:bg-gray-700 p-3 cursor-pointer transition-all"
+                                    to="/proceso"
+                                >
+                                    Lista de Operaciones
+                                </Link>
+                                <Link
+                                    className="hover:bg-gray-700 p-3 cursor-pointer transition-all"
+                                    to="/crear-proceso"
+                                >
+                                    Crear Operacion
+                                </Link>
                             </>
                         )}
                     </ul>

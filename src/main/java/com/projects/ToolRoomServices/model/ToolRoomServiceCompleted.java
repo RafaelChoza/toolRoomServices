@@ -15,6 +15,9 @@ public class ToolRoomServiceCompleted {
     private String email;
     private String descriptionService;
     private String worker;
+    private String process1;
+    private String process2;
+    private String process3;
     private String area;
     private String status;
     private LocalDateTime dateTime;
@@ -103,4 +106,29 @@ public class ToolRoomServiceCompleted {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public String getProcess1() {
+        return process1;
+    }
+
+    public void setProcess1(String process1) {
+        this.process1 = process1;
+    }
+
+    public String getProcess2() {
+        return process2;
+    }
+
+    public void setProcess2(String process2) {
+        this.process2 = process2;
+    }
+
+    public String getProcess3() {
+        return process3;
+    }
+
+    public void setProcess3(String process3) {
+        this.process3 = process3;
+    }
+    
 }

@@ -11,6 +11,9 @@ interface Service {
     dateCompleted: string;
     descriptionService: string;
     worker: string;
+    process1: string;
+    process2: string;
+    process3: string;
     area: string;
     status: string;
     days: number;
@@ -136,6 +139,18 @@ export default function CompletedServices() {
                                     <p>
                                         <strong className="text-cyan-300">Asignado a:</strong>{" "}
                                         {item.worker}
+                                    </p>
+                                    <p>
+                                        <strong className="text-cyan-300">Proceso 1:</strong>{" "}
+                                        {item.process1}
+                                    </p>
+                                    <p>
+                                        <strong className="text-cyan-300">Proceso 2:</strong>{" "}
+                                        {item.process2}
+                                    </p>
+                                    <p>
+                                        <strong className="text-cyan-300">Proceso 3:</strong>{" "}
+                                        {item.process3}
                                     </p>
                                 </div>
                             </div>

@@ -1,8 +1,10 @@
 package com.projects.ToolRoomServices.service;
 
+import com.projects.ToolRoomServices.dto.ProcessOperations;
 import com.projects.ToolRoomServices.dto.ToolRoomService;
 import com.projects.ToolRoomServices.dto.Worker;
 import com.projects.ToolRoomServices.model.ToolRoomServiceCompleted;
+import com.projects.ToolRoomServices.repositories.ProcessOperationServiceRepository;
 import com.projects.ToolRoomServices.repositories.ToolRoomServiceCompletedRepository;
 import com.projects.ToolRoomServices.repositories.ToolRoomServiceRepository;
 import com.projects.ToolRoomServices.repositories.WorkerServiceRepository;
@@ -31,6 +33,9 @@ public class ToolRoomServicesService {
 
     @Autowired
     WorkerServiceRepository workerServiceRepository;
+
+    @Autowired
+    ProcessOperationServiceRepository processOperationServiceRepository;
 
     public ToolRoomService createService(ToolRoomService toolRoomService) {
         return toolRoomServiceRepository.save(toolRoomService);
@@ -69,8 +74,13 @@ public class ToolRoomServicesService {
         completedService.setDays(daysBetween); // Asigna el resultado al nuevo campo
         completedService.setDescriptionService(service.getDescriptionService());
         completedService.setWorker(service.getWorker());
+        completedService.setProcess1(service.getProceso1());
+        completedService.setProcess2(service.getProceso2());
+        completedService.setProcess3(service.getProceso3());
         completedService.setArea(service.getArea());
         completedService.setStatus("Completado");
+
+        System.out.println(completedService);
 
 
         entityManager.persist(completedService);
@@ -113,4 +123,23 @@ public class ToolRoomServicesService {
         return toolRoomServiceRepository.save(service);
     }
 
+    public List<ProcessOperations> getAllProcessOperations() {
+        return processOperationServiceRepository.findAll();
+    }
+
+    public Optional<ProcessOperations> getProcessOperationById(Long id) {
+        return processOperationServiceRepository.findById(id);
+    }
+
+    public ProcessOperations createProcessOperation(ProcessOperations processOperation) {
+        return processOperationServiceRepository.save(processOperation);
+    }
+
+    public ProcessOperations updateProcessOperation(ProcessOperations processOperation) {
+        return processOperationServiceRepository.save(processOperation);
+    }
+
+    public void deleteProcessOperation(Long id) {
+        processOperationServiceRepository.deleteById(id);
+    }
 }

@@ -1,6 +1,7 @@
 package com.projects.ToolRoomServices.controller;
 
 import com.projects.ToolRoomServices.dto.LoginUser;
+import com.projects.ToolRoomServices.dto.ProcessOperations;
 import com.projects.ToolRoomServices.dto.ToolRoomService;
 import com.projects.ToolRoomServices.dto.Worker;
 import com.projects.ToolRoomServices.model.ToolRoomServiceCompleted;
@@ -270,6 +271,73 @@ public class ToolRoomServiceController {
         } else {
             ResponseEntity<Void> responseEntity = ResponseEntity.notFound().build();
             return new ResponseWrapper<>(false, "El usuario a eliminar no existe", responseEntity);
+        }
+    }
+
+    @GetMapping("/process")
+    public ResponseWrapper<List<ProcessOperations>> getAllOperations() {
+        System.out.println("Obteniendo operaciones");
+        log.info("Obteniendo operaciones");
+        List<ProcessOperations> processOperationsList = toolRoomServicesService.getAllProcessOperations();
+        ResponseEntity<List<ProcessOperations>> responseEntity = ResponseEntity.ok(processOperationsList);
+
+        return new ResponseWrapper<>(true, "Listado de Operaciones", responseEntity);
+    }
+
+    @GetMapping("process/{id}")
+    public ResponseWrapper<ProcessOperations> getProcessById(@PathVariable  Long id) {
+        System.out.println("Obteniendo operacion con id: " + id);
+        log.info("Obteniendo operacion con id: {}", id);
+        Optional<ProcessOperations> operOptional = toolRoomServicesService.getProcessOperationById(id);
+        ResponseEntity<ProcessOperations> processResponseEntity;
+
+        processResponseEntity = operOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+
+        return new ResponseWrapper<>(true, "Operacion con id obtenida", processResponseEntity);
+    }
+
+    @PostMapping("/process")
+    public ResponseWrapper<ProcessOperations> createOperation(@RequestBody ProcessOperations processOperations) {
+        try {
+            ProcessOperations processOperationsCreated = toolRoomServicesService.createProcessOperation(processOperations);
+            ResponseEntity<ProcessOperations> responseEntity = ResponseEntity.created(new URI("http://localhost/process")).build();
+            return new ResponseWrapper<>( true, "Operacion creada con éxito", responseEntity);
+        } catch (Exception e) {
+            ResponseEntity<ProcessOperations> responseEntity = ResponseEntity.badRequest().build();
+            return new ResponseWrapper<>(false, e.getMessage(), responseEntity);
+        }
+    }
+
+    @PutMapping("/process/{id}")
+    public ResponseWrapper<ProcessOperations> updateOperation(@PathVariable Long id, @RequestBody ProcessOperations updatedProcess) {
+        System.out.println("Id recibido: " + id);
+        System.out.println("Operacion recibida: " + updatedProcess);
+        Optional<ProcessOperations> processOptional = toolRoomServicesService.getProcessOperationById(id);
+
+        if (processOptional.isPresent()) {
+            updatedProcess.setId(processOptional.get().getId());
+            toolRoomServicesService.updateProcessOperation(updatedProcess);
+
+            ResponseEntity<ProcessOperations> responseEntity = ResponseEntity.ok(updatedProcess);
+            return new ResponseWrapper<>(true, "Operacion actualziada con éxito", responseEntity);
+        } else {
+            ResponseEntity<ProcessOperations> responseEntity = ResponseEntity.notFound().build();
+            return new ResponseWrapper<>(false, "La operacion indicada no existe", responseEntity);
+        }
+    }
+
+    @DeleteMapping("/process/{id}")
+    public ResponseWrapper<Void> deleteOperation(@PathVariable Long id) {
+
+        Optional<ProcessOperations> processOptional = toolRoomServicesService.getProcessOperationById(id);
+        if (processOptional.isPresent()) {
+            System.out.println("Id recibido: " + id);
+            toolRoomServicesService.deleteProcessOperation(id);
+            ResponseEntity<Void> responseEntity = ResponseEntity.noContent().build();
+            return new ResponseWrapper<>(true, "Operacion eliminada con éxito", responseEntity);
+        } else {
+            ResponseEntity<Void> responseEntity = ResponseEntity.notFound().build();
+            return new ResponseWrapper<>(false, "La operacion a eliminar no existe", responseEntity);
         }
     }
 }

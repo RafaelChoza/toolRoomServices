@@ -9,6 +9,8 @@ import CrearWorker from "./views/CrearWorker";
 import ProtectedRoute from "../src/views/ProtectedRoute";
 import UsersList from "./views/UsersList";
 import CrearUser from "./views/CrearUser";
+import CreateProcess from "./views/CreateProcess";
+import ProcessList from "./views/ProcessList";
 export default function RouterApp() {
   return (
     <HashRouter>
@@ -77,6 +79,22 @@ export default function RouterApp() {
           element={
             <ProtectedRoute>
               <CrearUser />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/proceso" 
+          element={
+            <ProtectedRoute>
+              <ProcessList />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/crear-proceso" 
+          element={
+            <ProtectedRoute>
+              <CreateProcess />
             </ProtectedRoute>
           } 
         />

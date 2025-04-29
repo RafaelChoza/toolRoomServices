@@ -11,9 +11,9 @@ interface Service {
   descriptionService: string;
   workerId: number | null;
   worker: string;
-  process1: string;
-  process2: string;
-  process3: string;
+  proceso1: string;
+  proceso2: string;
+  proceso3: string;
   area: string;
   status: string;
 }
@@ -22,6 +22,12 @@ interface Worker {
   id: number;
   nameWorker: string;
   lastName: string;
+}
+
+interface Operacion {
+  id: number;
+  nameProcess: string;
+  description: string;
 }
 
 interface ApiResponse {
@@ -39,6 +45,7 @@ export default function Principal() {
   const [servicios, setServicios] = useState<Service[]>([]);
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [operations, setOperations] = useState<Operacion[]>([]);
 
   const [showModal, setShowModal] = useState(false);
   const [serviceToEdit, setServiceToEdit] = useState<Service | null>(null);
@@ -52,6 +59,7 @@ export default function Principal() {
   useEffect(() => {
     fetchServices();
     fetchWorkers();
+    fetchOperations();
   }, []);
 
   const fetchServices = async () => {
@@ -76,6 +84,23 @@ export default function Principal() {
       console.error('Error al obtener trabajadores:', error);
     }
   };
+
+  const fetchOperations = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/process");
+      if (!response.ok) throw new Error("Error en la petición de operaciones");
+
+      const data = await response.json();
+
+      // Ajustamos la extracción de datos
+      const operationsData = data.responseEntity?.body || [];
+      setOperations(operationsData);
+    } catch (error) {
+      console.error("Error al obtener operaciones:", error);
+    }
+  };
+
+
 
   const completeService = async (id: number) => {
     if (!window.confirm('¿Marcar este servicio como completado?')) return;
@@ -128,6 +153,7 @@ export default function Principal() {
 
   const handleEditSubmit = async () => {
     if (!serviceToEdit) return;
+    console.log(serviceToEdit)
     try {
       const response = await fetch(`http://localhost:8080/services/${serviceToEdit.id}`, {
         method: 'PUT',
@@ -144,6 +170,17 @@ export default function Principal() {
       console.error('Error actualizando servicio:', error);
     }
   };
+
+  const handleProcessChange = (num: number, value: string) => {
+    setServiceToEdit((prev) =>
+      prev ? {
+        ...prev,
+        [`proceso${num}`]: value // Cambiar a "procesoX" si el backend lo espera así
+      } : prev
+    );
+  };
+
+
 
   const filteredServicios = servicios.filter((servicio) =>
     servicio.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -215,9 +252,29 @@ export default function Principal() {
                         </select>
                       </p>
                     )}
-                    <p><strong>Proceso 1:</strong>{item.process1}</p>
-                    <p><strong>Proceso 2:</strong>{item.process2}</p>
-                    <p><strong>Proceso 3:</strong>{item.process3}</p>
+                    {perfil !== "USER" && (
+                      <div className="flex flex-col space-y-2">
+                          <p>
+                            <strong className="text-pink-400">Proceso 1:</strong> {item.proceso1}
+                          </p>
+                      </div>
+                    )}
+                    {perfil !== "USER" && (
+                      <div className="flex flex-col space-y-2">
+                          <p>
+                            <strong className="text-pink-400">Proceso 2:</strong> {item.proceso2}
+                          </p>
+                      </div>
+                    )}
+                    {perfil !== "USER" && (
+                      <div className="flex flex-col space-y-2">
+                          <p>
+                            <strong className="text-pink-400">Proceso 3:</strong> {item.proceso3}
+                          </p>
+                      </div>
+                    )}
+                      
+
                     <p><strong className="text-pink-400">Fecha:</strong> {new Date(item.dateTime).toLocaleString()}</p>
                     <div className="flex flex-col space-x-2 md:space-x-2 mt-2 space-y-2 md:flex-row">
                       {perfil !== 'USER' && (
@@ -281,9 +338,23 @@ export default function Principal() {
                     </option>
                   ))}
                 </select>
-                <input type="text" name="process1" value={serviceToEdit.process1} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full" placeholder="Proceso 1" />
-                <input type="text" name="process2" value={serviceToEdit.process2} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full" placeholder="Proceso 2" />
-                <input type="text" name="process3" value={serviceToEdit.process3} onChange={handleEditChange} className="bg-gray-700 p-3 rounded-lg text-gray-300 w-full" placeholder="Proceso 3" />
+                {perfil !== "USER" &&
+                  operations?.length > 0 &&
+                  [1, 2, 3].map((num) => (
+                    <p key={num}>
+
+                      <select className="bg-gray-700 text-gray-300 rounded-lg p-2 mt-1" name={`process${num}`} onChange={(e) => handleProcessChange(num, e.target.value)} value={serviceToEdit[`process${num}` as keyof Service] || ""}>
+                        <option value="">Seleccionar operación</option>
+                        {operations.map((op) => {
+                          return (
+                            <option key={op.id} value={op.nameProcess}>
+                              {op.nameProcess}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </p>
+                  ))}
               </div>
             </div>
 
@@ -295,8 +366,6 @@ export default function Principal() {
           </div>
         </div>
       )}
-
-
     </div>
   );
 }
