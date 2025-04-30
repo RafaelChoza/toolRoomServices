@@ -56,11 +56,12 @@ export default function CompletedServices() {
 
     // Filtrar los servicios completados según el término de búsqueda
     const filteredCompleted = completed.filter((item) =>
-        item.customer.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.descriptionService.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.area.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.email.toLowerCase().includes(searchTerm.toLowerCase())
+        item.customer?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.descriptionService?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.area?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    
 
     return (
         <div className="bg-gray-900 min-h-screen text-gray-300 p-6 font-sans">
