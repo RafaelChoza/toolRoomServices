@@ -343,7 +343,7 @@ export default function Principal() {
                   [1, 2, 3].map((num) => (
                     <p key={num}>
 
-                      <select className="bg-gray-700 text-gray-300 rounded-lg p-2 mt-1" name={`process${num}`} onChange={(e) => handleProcessChange(num, e.target.value)} value={serviceToEdit[`process${num}` as keyof Service] || ""}>
+                      <select className="bg-gray-700 text-gray-300 rounded-lg p-2 mt-1" name={`process${num}`} onChange={(e) => handleProcessChange(num, e.target.value)} value={serviceToEdit[`proceso${num}` as keyof Service] || ""}>
                         <option value="">Seleccionar operación</option>
                         {operations.map((op) => {
                           return (
