@@ -2,6 +2,9 @@ package com.projects.ToolRoomServices.controller;
 
 import com.projects.ToolRoomServices.dto.LoginUser;
 import com.projects.ToolRoomServices.service.LoginService;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,35 +14,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("auth/login")
+@RequestMapping("/auth/")
 public class AuthController {
 
     @Autowired
     private LoginService loginService;
 
-    @PostMapping
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        try {
-            if (loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
-                return ResponseEntity.badRequest().body("Username y password son requeridos");
-            }
-
-            LoginUser loginUser = loginService.findByUsername(loginRequest.getUsername());
-            if (loginUser != null && loginUser.getPassword().equals(loginRequest.getPassword())) {
-                // Aquí devolvemos un objeto con username y perfil
-                return ResponseEntity.ok(new LoginResponse(loginUser.getUsername(), loginUser.getPerfil()));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario o contraseña incorrectos");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Hubo un error en el servidor");
-        }
+    @PostMapping("/login")
+public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    if (loginRequest.getUsername() == null || loginRequest.getPassword() == null) {
+        return ResponseEntity.badRequest().body(Map.of("error", "Username y password son requeridos"));
     }
 
+    LoginUser user = loginService.findByUsername(loginRequest.getUsername());
+    if (user != null && user.verifyPassword(loginRequest.getPassword())) {
+        return ResponseEntity.ok(Map.of(
+            "message", "Login exitoso",
+            "username", user.getUsername(),
+            "perfil", user.getPerfil()
+        ));
+    } else {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", "Usuario o contraseña incorrectos"));
+    }
 }
-
-
+}
 
 class LoginRequest {
     private String username;
@@ -53,7 +52,7 @@ class LoginRequest {
     public void setPerfil(String perfil) {
         this.perfil = perfil;
     }
-// Getters y Setters
+    // Getters y Setters
 
     public String getUsername() {
         return username;
@@ -89,4 +88,3 @@ class LoginResponse {
         return perfil;
     }
 }
-

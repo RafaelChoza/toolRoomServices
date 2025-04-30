@@ -2,6 +2,8 @@ package com.projects.ToolRoomServices.service;
 
 import com.projects.ToolRoomServices.dto.LoginUser;
 import com.projects.ToolRoomServices.repositories.LoginRepository;
+import com.projects.ToolRoomServices.security.PasswordUtil;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +16,17 @@ public class LoginService {
     @Autowired
     private LoginRepository loginRepository;
 
-    public boolean authenticate(String username, String password, String perfil) {
+    public LoginUser createUser(String username, String password, String perfil) {
+        LoginUser user = new LoginUser();
+        user.setUsername(username);
+        user.setPassword(PasswordUtil.hashPassword(password)); // Se encripta antes de guardarlo
+        user.setPerfil(perfil);
+        return loginRepository.save(user);
+    }
+
+    public boolean authenticate(String username, String password) {
         LoginUser loginUser = loginRepository.findByUsername(username);
-        if (loginUser != null) {
-            return loginUser.getPassword().equals(password);
-        }
-        return false;
+        return loginUser != null && loginUser.verifyPassword(password); // Comparación segura
     }
 
     public List<LoginUser> getAllUsers() {

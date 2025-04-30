@@ -1,5 +1,7 @@
 package com.projects.ToolRoomServices.dto;
 
+import com.projects.ToolRoomServices.security.PasswordUtil;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -44,8 +46,13 @@ public class LoginUser {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = PasswordUtil.hashPassword(password);
     }
+
+    public boolean verifyPassword(String password) {
+        return PasswordUtil.checkPassword(password, this.password);
+    }
+    
 
     @Override
     public String toString() {
