@@ -10,6 +10,9 @@ interface Service {
   area: string;
   status: string;
   worker: string;
+  proceso1: string;
+  proceso2: string;
+  proceso3: string;
   dateTime: string;
 }
 
@@ -65,6 +68,9 @@ export default function DetalleServicio() {
           <p><strong className="text-cyan-300">Área:</strong> {servicio?.area}</p>
           <p><strong className="text-cyan-300">Estado:</strong> {servicio?.status}</p>
           <p><strong className="text-pink-400">Trabajador:</strong> {servicio?.worker}</p>
+          <p><strong className="text-pink-400">Proceso 1:</strong> {servicio?.proceso1}</p>
+          <p><strong className="text-pink-400">Proceso 2:</strong> {servicio?.proceso2}</p>
+          <p><strong className="text-pink-400">Proceso 3:</strong> {servicio?.proceso3}</p>
           <p><strong className="text-pink-400">Fecha:</strong> {new Date(servicio?.dateTime || '').toLocaleString()}</p>
         </div>
       </div>
